@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "outDir": "dist",
+        "declaration": true,
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true
+    },
+    "include": ["./src/**.ts"]
+}
