@@ -8,7 +8,7 @@ import { packageManager } from './env.js';
 
 process.on('uncaughtException', (error) => {
     if(error instanceof Error && error.name === "ExitPromptError") return;
-})
+});
 
 init();
 
@@ -68,8 +68,7 @@ async function init() {
     }
 
     // create the input file
-    const file = "import GL from 'gimloader';\n\n" + 
-        "GL.net.onLoad(() => console.log('hello world!'));";
+    const file = "api.net.onLoad(() => console.log('hello world!'));";
 
     let inputFile = useTs ? 'index.ts' : 'index.js';
     fs.writeFileSync(join(path, "src", inputFile), file);

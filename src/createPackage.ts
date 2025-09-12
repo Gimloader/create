@@ -22,11 +22,9 @@ export function createPackage(path: string, name: string, description: string, a
     fs.writeFileSync(join(path, 'package.json'), JSON.stringify(pkg, null, 2));
 
     if(packageManager === "bun") {
-        execSync('bun add -D @gimloader/build', { cwd: path });
-        execSync('bun add gimloader', { cwd: path });
+        execSync('bun add -D @gimloader/build @types/gimloader', { cwd: path });
     } else {
-        execSync('npm i -D @gimloader/build', { cwd: path });
-        execSync('npm i gimloader', { cwd: path });
+        execSync('npm i -D @gimloader/build @types/gimloader', { cwd: path });
     }
 
     console.log('\x1b[2K\r' + chalk.green('✔') + chalk.bold(' Installing dependencies'))
