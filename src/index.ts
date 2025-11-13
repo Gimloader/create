@@ -73,7 +73,7 @@ async function init() {
     let inputFile = useTs ? 'index.ts' : 'index.js';
     fs.writeFileSync(join(path, "src", inputFile), file);
 
-    // create GL.config.js
+    // create gimloader.config.js
     let configFile = `import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
@@ -87,7 +87,7 @@ export default {
     version: pkg.version
 }`;
 
-    fs.writeFileSync(join(path, 'GL.config.js'), configFile);
+    fs.writeFileSync(join(path, 'gimloader.config.js'), configFile);
 
     // create .gitignore
     fs.writeFileSync(join(path, ".gitignore"), "node_modules");
