@@ -1,2 +1,3 @@
-// no deno support for now
-export const packageManager = typeof Bun !== "undefined" ? "bun" : "npm";
+const executable = process.argv[0].replaceAll('\\', '/').split("/").pop();
+export const packageManager = executable.includes("bun") ? "bun" : executable.includes("deno") ? "deno" : "npm";
+export const canImportTs = packageManager === "deno" || process.versions.node >= "22.18.0";
