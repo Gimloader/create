@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { input, confirm, select } from '@inquirer/prompts';
+import { input, confirm, select } from "@inquirer/prompts";
 import { resolve, join, basename } from "node:path";
-import fs from 'node:fs';
-import { createPackage } from './createPackage.js';
-import chalk from 'chalk';
-import { canImportTs, packageManager } from './env.js';
+import fs from "node:fs";
+import { createPackage } from "./createPackage.js";
+import chalk from "chalk";
+import { canImportTs, packageManager } from "./env.js";
+import { createTsConfig } from "./tsconfig.js";
 
 process.on('uncaughtException', (error) => {
     if(error instanceof Error && error.name === "ExitPromptError") return;
@@ -71,16 +72,16 @@ export default workspaceConfig({
     }
 });`;
 
-    let configFile = useTs && canImportTs ? 'gimloader.config.ts' : 'gimloader.config.js';
+    const configFile = useTs && canImportTs ? "gimloader.config.ts" : "gimloader.config.js";
     fs.writeFileSync(join(path, configFile), config);
 
     // Create a sample plugin
     const pluginPath = join(srcPath, "hello");
     fs.mkdirSync(pluginPath, { recursive: true });
 
-    const file = "api.net.onLoad(() => console.log('Hello world!'));";
-    const inputFile = useTs ? 'index.ts' : 'index.js';
-    fs.writeFileSync(join(pluginPath, inputFile), file);
+    const contents = `api.net.onLoad(() => console.log("Hello world!"));`;
+    const inputFile = useTs ? "index.ts" : "index.js";
+    fs.writeFileSync(join(pluginPath, inputFile), contents);
 
     // Create the plugin's config
     const singleConfig =
@@ -94,10 +95,10 @@ export default singleConfig({
     version: "1.0.0"
 });`;
 
-    const singleConfigFile = useTs && canImportTs ? 'gimloader.config.ts' : 'gimloader.config.js';
-    fs.writeFileSync(join(pluginPath, singleConfigFile), singleConfig);
+    fs.writeFileSync(join(pluginPath, configFile), singleConfig);
 
     createPackage(path, basename(path));
+    createTsConfig(path, useTs, true);
 }
 
 async function createSingle(path: string) {
@@ -135,17 +136,17 @@ async function createSingle(path: string) {
     }
 
     // create the input file
-    const file = "api.net.onLoad(() => console.log('Hello world!'));";
+    const contents = `api.net.onLoad(() => console.log("Hello world!"));`;
 
-    const inputFile = useTs ? 'index.ts' : 'index.js';
-    fs.writeFileSync(join(path, "src", inputFile), file);
+    const inputFile = useTs ? "index.ts" : "index.js";
+    fs.writeFileSync(join(path, "src", inputFile), contents);
 
     // create gimloader.config.js
     const config =
-`import fs from 'fs';
+`import fs from "fs";
 import { singleConfig } from "@gimloader/build";
 
-const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+const pkg = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 
 export default singleConfig({
     input: "./src/${inputFile}",
@@ -155,8 +156,9 @@ export default singleConfig({
     version: pkg.version
 });`;
 
-    const configFile = useTs && canImportTs ? 'gimloader.config.ts' : 'gimloader.config.js';
+    const configFile = useTs && canImportTs ? "gimloader.config.ts" : "gimloader.config.js";
     fs.writeFileSync(join(path, configFile), config);
 
     createPackage(path, name, description, author);
+    createTsConfig(path, useTs, false);
 }

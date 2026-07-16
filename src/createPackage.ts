@@ -24,11 +24,11 @@ export function createPackage(path: string, name: string, description?: string, 
 
     const execOptions: ExecSyncOptions = { cwd: path, stdio: "ignore" };
     if(packageManager === "bun") {
-        execSync('bun add -D @gimloader/build @types/gimloader', execOptions);
+        execSync('bun add -D @gimloader/build @gimloader/types', execOptions);
     } else if(packageManager === "npm") {
-        execSync('npm i -D @gimloader/build @types/gimloader', execOptions);
+        execSync('npm i -D @gimloader/build @gimloader/types', execOptions);
     } else if(packageManager === "deno") {
-        execSync('deno add -D npm:@gimloader/build npm:@types/gimloader', execOptions);
+        execSync('deno add -D npm:@gimloader/build npm:@gimloader/types', execOptions);
     }
 
     console.log('\x1b[2K\r' + chalk.green('✔') + chalk.bold(' Installing dependencies'))
